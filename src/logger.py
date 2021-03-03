@@ -18,7 +18,7 @@ class Logger:
     :returns Logger logger: logger object
     """
 
-    def __init__(self, debug=False, log_file=None, log_name="dpglog", when='H', file_log_interval=6):
+    def __init__(self, debug=False, log_file=None, log_name="logs", when='H', file_log_interval=6):
         self._logger = logging.getLogger(log_name)
         self._logger.setLevel(logging.INFO)
         self._logger.handlers = []
