@@ -1,11 +1,11 @@
 FROM python:3.7
 
-WORKDIR /dpg-test
+WORKDIR /sqs-test
 
 COPY requirements.txt .
 
 RUN pip install -r requirements.txt
 
-COPY . /dpg ./dpg
+COPY . /src ./src
 
-CMD [ "python", "./dpg/process.py" ]
+CMD [ "python", "./src/process.py" ]

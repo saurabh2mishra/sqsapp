@@ -37,15 +37,17 @@ def get_all_messages(client, queue_url, logger, batch_size=10):
         return messages_list
 
 def delete_consume_messages_from_queue(client, received_batch_messages, queue_url):
-          """
+        """
         Functions to delete all consumed messages from sqs queue.
         
         :param list received_batch_messages: fetched messages
         :param string queue_url: batch size to fetch messages from queue.
-        :returns Boolean : True/False
+        :returns Boolean : True if deletition of messages is successful.
         """
-         entries = [{'Id': msg['MessageId'], 'ReceiptHandle': msg['ReceiptHandle']}
-            for msg in received_batch_messages['Messages']]
+        
+        entries = [{'Id': msg['MessageId'],
+                        'ReceiptHandle': msg['ReceiptHandle']} 
+                        for msg in received_batch_messages['Messages']]
 
         resp = client.delete_message_batch(QueueUrl=queue_url, Entries=entries)
 
