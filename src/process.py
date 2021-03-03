@@ -8,7 +8,7 @@ from config import EndPointUrl, QueueUrl, outputfileloc
 from logger import Logger, createdir
 
 
-def get_all_messages(client, logger, batch_size=10):
+def get_all_messages(client, queue_url, logger, batch_size=10):
         """
         Functions to returns all consumed messages from sqs queue.
         
@@ -21,7 +21,7 @@ def get_all_messages(client, logger, batch_size=10):
         while True:
                 logger.info('Consumptions started..')
                 messages_consumed = []
-                received_batch_messages = client.receive_message(QueueUrl=QueueUrl, MaxNumberOfMessages=batch_size)
+                received_batch_messages = client.receive_message(QueueUrl=queue_url, MaxNumberOfMessages=batch_size)
                 try:
                         messages_list.append(
                                 json.loads(
@@ -31,9 +31,30 @@ def get_all_messages(client, logger, batch_size=10):
                         logger.error("All messages are consumed. So, encountered - \
                                     Key Error while consuming the messages.", exc_info=True)
                         break
-        
+
+       # delete_consume_messages_from_queue(client, received_batch_messages, queue_url)
+
         return messages_list
 
+def delete_consume_messages_from_queue(client, received_batch_messages, queue_url):
+          """
+        Functions to delete all consumed messages from sqs queue.
+        
+        :param list received_batch_messages: fetched messages
+        :param string queue_url: batch size to fetch messages from queue.
+        :returns Boolean : True/False
+        """
+         entries = [{'Id': msg['MessageId'], 'ReceiptHandle': msg['ReceiptHandle']}
+            for msg in received_batch_messages['Messages']]
+
+        resp = client.delete_message_batch(QueueUrl=queue_url, Entries=entries)
+
+        if len(resp['Successful']) != len(entries):
+                error_msg =f"Failed to delete messages: entries={entries} resp={resp}"
+                logger.error(error_msg)
+                raise RuntimeError(error_msg)
+
+        return True
 
 def get_stats(messages, logger):
         """
@@ -76,7 +97,7 @@ if __name__ =='__main__':
         logger = Logger().get_logger()
         logger.info('Starting the sqs client..')
         client = boto3.client('sqs', endpoint_url=EndPointUrl)
-        messages = get_all_messages(client, logger)
+        messages = get_all_messages(client, QueueUrl, logger)
         messages_stats = get_stats(messages, logger)
         write_out_file(messages_stats, outputfileloc, logger)
        
