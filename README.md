@@ -3,7 +3,7 @@ Descriptions
 ============
 
 This is a simple application to consume messages from aws sqs queue.
-The program consumes the messages from sql queue and dump it into outputs files.
+The program consumes the messages from sql queue and dump certain stats into outputs file.
 
 The below criteria has been taken into consideration
 
