@@ -45,7 +45,7 @@ def delete_consumed_messages_from_queue(client, received_batch_messages, queue_u
         :param client client: boto3 client instance.
         :param list received_batch_messages: fetched messages
         :param string queue_url: batch size to fetch messages from queue.
-        :returns Boolean : True if deletition of messages is successful.
+        :returns Boolean : True if deletion of messages is successful.
         """
         
         entries = [{'Id': msg['MessageId'],
