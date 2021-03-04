@@ -85,9 +85,7 @@ env.bak/
 .ipynb_checkpoints/
 
 # exclude data, logs, outputs from source control by default
-logs/
 data/
-outputs/
 
 # Temporary plotly htmls
 temp-plot.html

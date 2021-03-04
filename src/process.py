@@ -4,8 +4,9 @@ import boto3
 import pandas as pd
 from datetime import datetime
 
-from config import EndPointUrl, QueueUrl, outputfileloc
-from logger import Logger, createdir
+from src.config import EndPointUrl, QueueUrl, outputfileloc
+from src.logger import Logger, createdir
+
 
 
 def get_all_messages(client, queue_url, logger, batch_size=10):
@@ -31,12 +32,13 @@ def get_all_messages(client, queue_url, logger, batch_size=10):
                         logger.error("All messages are consumed. So, encountered - \
                                     Key Error while consuming the messages.", exc_info=True)
                         break
-
-       # delete_consume_messages_from_queue(client, received_batch_messages, queue_url)
+        # Commenting in order to not delete any messages from source queue.
+        # delete_consumed_messages_from_queue(client, received_batch_messages, queue_url)
 
         return messages_list
 
-def delete_consume_messages_from_queue(client, received_batch_messages, queue_url):
+
+def delete_consumed_messages_from_queue(client, received_batch_messages, queue_url):
         """
         Functions to delete all consumed messages from sqs queue.
         
@@ -58,6 +60,7 @@ def delete_consume_messages_from_queue(client, received_batch_messages, queue_ur
 
         return True
 
+
 def get_stats(messages, logger):
         """
         Functions to returns relevant stats from the received messages.
@@ -77,6 +80,7 @@ def get_stats(messages, logger):
         df_stats = messages_df.groupby('type')['value'].agg(['count','sum']).reset_index()      
         return df_stats.to_dict(orient='records')
 
+
 def write_out_file(messages, outputfileloc, logger, filename='out.txt'):
         """
         Functions to write messages in file. It creates folder on date wise and 
@@ -95,6 +99,7 @@ def write_out_file(messages, outputfileloc, logger, filename='out.txt'):
                         f.write("%s\n" % stat)
         logger.info("Stats is written in out file.")
 
+
 if __name__ =='__main__':
         logger = Logger().get_logger()
         logger.info('Starting the sqs client..')
@@ -102,6 +107,4 @@ if __name__ =='__main__':
         messages = get_all_messages(client, QueueUrl, logger)
         messages_stats = get_stats(messages, logger)
         write_out_file(messages_stats, outputfileloc, logger)
-       
-
         
