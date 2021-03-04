@@ -42,6 +42,7 @@ def delete_consumed_messages_from_queue(client, received_batch_messages, queue_u
         """
         Functions to delete all consumed messages from sqs queue.
         
+        :param client client: boto3 client instance.
         :param list received_batch_messages: fetched messages
         :param string queue_url: batch size to fetch messages from queue.
         :returns Boolean : True if deletition of messages is successful.
@@ -67,7 +68,6 @@ def get_stats(messages, logger):
         
         :param list messages: a list of messages
         :param Logger logger: a logger instance
-        :param int batch_size: batch size to fetch messages from queue.
         :returns dict stats: a dict containing relevant stats.
         """
         if not isinstance(messages, list):
@@ -87,7 +87,9 @@ def write_out_file(messages, outputfileloc, logger, filename='out.txt'):
         write stats of the consumed messages from sqs app.
         
         :param list messages: a list of messages
+        :param string outputfileloc: folder location to write the stats
         :param Logger logger: a logger instance
+        :param string filename: filename to write stats on outputfileloc
         :returns None:
         """
         date_dir = datetime.today().strftime('%Y%m%d')
