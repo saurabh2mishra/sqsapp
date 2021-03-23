@@ -8,4 +8,4 @@ RUN pip install -r requirements.txt
 
 COPY . /src ./src
 
-CMD [ "python", "./src/process.py" ]
+CMD [ "python -m", "src.process" ]
