@@ -32,8 +32,8 @@ def get_all_messages(client, queue_url, logger, batch_size=10):
                         logger.error("All messages are consumed. So, encountered - \
                                     Key Error while consuming the messages.", exc_info=True)
                         break
-        # Commenting in order to not delete any messages from source queue.
-        # delete_consumed_messages_from_queue(client, received_batch_messages, queue_url)
+        
+        delete_consumed_messages_from_queue(client, received_batch_messages, queue_url)
 
         return messages_list
 
