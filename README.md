@@ -1,6 +1,7 @@
 
 Descriptions
 ============
+**This repo provides the support code for one of my [blogs](https://medium.com/analytics-vidhya/optimize-your-code-with-python-generator-9498b6ea1fa4)**
 
 This is a simple application to consume messages from aws sqs queue.
 
